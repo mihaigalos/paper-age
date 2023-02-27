@@ -109,8 +109,7 @@ impl Document {
         current_layer.begin_text_section();
 
         current_layer.set_text_cursor(
-            self.page_size.dimensions().margin
-                + Mm::from(Pt(font_size)) * 14.5,
+            self.page_size.dimensions().margin + Mm::from(Pt(font_size)) * 14.5,
             (self.page_size.dimensions().height / 2.0)
                 - Mm::from(Pt(font_size))
                 - self.page_size.dimensions().margin,

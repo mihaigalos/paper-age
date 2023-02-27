@@ -80,13 +80,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-
     // Encrypt the plaintext to a ciphertext using the passphrase...
-    let (plaintext_len, encrypted) = match args.age_input{
+    let (plaintext_len, encrypted) = match args.age_input {
         false => {
             let passphrase = get_passphrase()?;
             encryption::encrypt_plaintext(&mut reader, passphrase)?
-        },
+        }
         true => {
             // this allows providing raw age input (i.e.: from encrypting input to Yubikey
             // identities with cat in.txt | rage $(echo $identities) -e -a -o out
