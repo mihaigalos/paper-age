@@ -80,15 +80,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    let passphrase = get_passphrase()?;
 
     // Encrypt the plaintext to a ciphertext using the passphrase...
-    let (plaintext_len, encrypted) = match args.compress{
-        false => encryption::encrypt_plaintext(&mut reader, passphrase)?,
+    let (plaintext_len, encrypted) = match args.age_input{
+        false => {
+            let passphrase = get_passphrase()?;
+            encryption::encrypt_plaintext(&mut reader, passphrase)?
+        },
         true => {
-            let compressed_bytes = compress(reader);
-            let mut compressed_reader = BufReader::new(Box::new(&compressed_bytes[..]));
-            encryption::encrypt_plaintext(&mut compressed_reader, passphrase)?
+            // this allows providing raw age input (i.e.: from encrypting input to Yubikey
+            // identities with cat in.txt | rage $(echo $identities) -e -a -o out
+            // the invese operation cat out.age | rage -d -i ~/git/secrets/identities
+            encryption::encrypt_none_fallthrough(&mut reader)?
         }
     };
 
@@ -162,23 +165,6 @@ fn get_passphrase() -> Result<Secret<String>, io::Error> {
         Ok(secret) => Ok(secret),
         Err(e) => Err(io::Error::new(io::ErrorKind::Other, format!("{e}"))),
     }
-}
-
-#[cfg(feature = "compression")]
-fn compress(mut reader: BufReader<Box<dyn Read>>) -> Vec<u8> {
-    use std::io::prelude::*;
-    use flate2::Compression;
-    use flate2::write::GzEncoder;
-	let mut e = GzEncoder::new(Vec::new(), Compression::default());
-
-    let _ = e.write_all(reader.fill_buf().unwrap());
-    let compressed_bytes = e.finish();
-	compressed_bytes.unwrap()
-}
-
-#[cfg(not(feature = "compression"))]
-fn compress(_: BufReader<Box<dyn Read>>) -> Vec<u8> {
-    panic!("Compression-related function called but binary not built with --feature=compression");
 }
 
 #[cfg(test)]

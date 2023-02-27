@@ -32,6 +32,17 @@ pub fn encrypt_plaintext(
     Ok((plaintext.len(), utf8))
 }
 
+pub fn encrypt_none_fallthrough(
+    reader: &mut dyn std::io::BufRead
+    ) -> Result<(usize, String), Box<dyn std::error::Error>> {
+    debug!("Encrypting nothing, fall-through");
+
+    let mut plaintext = String::new();
+    reader.read_to_string(&mut plaintext)?;
+
+    Ok((plaintext.len(), plaintext))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

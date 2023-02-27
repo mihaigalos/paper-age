@@ -42,9 +42,9 @@ pub struct Args {
     #[arg(short, long, default_value_t = false)]
     pub no_footer: bool,
 
-    /// Compress input with GZip and base64 encode it to output
+    /// Input is raw age (i.e.: from encrypting input to Yubikey). Encode: cat in.txt | rage $(echo $identities) -e -a | paper-age --force --no-footer --title=YubikeyIds --age-input; Decode: cat out.age | rage -d -i ~/git/secrets/identities
     #[arg(short, long, default_value_t = false)]
-    pub compress: bool,
+    pub age_input: bool,
 
     /// The path to the file to read. Defaults to standard input. Max. ~1.9KB.
     pub input: Option<PathBuf>,
