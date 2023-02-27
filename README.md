@@ -141,6 +141,18 @@ Example:
 cargo run --features=compression -- in.txt --compress
 ```
 
+### Docker
+
+You can build your own docker with:
+```bash
+docker build -t paper-age .
+```
+
+And then you can run it with:
+```bash
+docker run --rm -it -v $(pwd):/src --entrypoint=sh paper-age
+```
+
 ## License & Credits
 
 PaperAge is released under the MIT License. See [LICENSE.txt](LICENSE.txt) for details.
