@@ -67,13 +67,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     let mut reader: BufReader<Box<dyn Read>> = {
         if path == PathBuf::from("-") {
-            BufReader::with_capacity(153600, Box::new(stdin().lock()))
+            BufReader::with_capacity(1048576, Box::new(stdin().lock()))
         } else if path.is_file() {
             let size = path.metadata()?.len();
             if size >= 2048 {
                 warn!("File too large ({size:?} bytes). The maximum file size is about 1.9 KiB.");
             }
-            BufReader::with_capacity(153600, Box::new(File::open(&path).unwrap()))
+            BufReader::with_capacity(1048576, Box::new(File::open(&path).unwrap()))
         } else {
             error!("File not found: {}", path.display());
             std::process::exit(exitcode::NOINPUT);
@@ -87,9 +87,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         false => encryption::encrypt_plaintext(&mut reader, passphrase)?,
         true => {
             let compressed_bytes = compress(reader);
-            let base64_encoded = to_base64(compressed_bytes);
-            let buf : Vec<u8> = base64_encoded.as_bytes().to_vec();
-            let mut compressed_reader = BufReader::new(Box::new(&buf[..]));
+            let mut compressed_reader = BufReader::new(Box::new(&compressed_bytes[..]));
             encryption::encrypt_plaintext(&mut compressed_reader, passphrase)?
         }
     };
@@ -178,20 +176,8 @@ fn compress(mut reader: BufReader<Box<dyn Read>>) -> Vec<u8> {
 	compressed_bytes.unwrap()
 }
 
-#[cfg(feature = "compression")]
-fn to_base64(compressed_bytes: Vec<u8>) -> String{
-    use base64::{Engine as _, engine::general_purpose};
-    let output = general_purpose::STANDARD.encode(compressed_bytes);
-    output
-}
-
 #[cfg(not(feature = "compression"))]
 fn compress(_: BufReader<Box<dyn Read>>) -> Vec<u8> {
-    panic!("Compression-related function called but binary not built with --feature=compression");
-}
-
-#[cfg(not(feature = "compression"))]
-fn to_base64(_: Vec<u8>) -> String{
     panic!("Compression-related function called but binary not built with --feature=compression");
 }
 
