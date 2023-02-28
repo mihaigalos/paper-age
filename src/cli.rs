@@ -39,7 +39,7 @@ pub struct Args {
     pub verbose: Verbosity,
 
     /// Disable drawing of footer
-    #[arg(short, long, default_value_t = false)]
+    #[arg(short, long, default_value_t = true)]
     pub no_footer: bool,
 
     /// Input is raw age (i.e.: from encrypting input to Yubikey). Encode: cat in.txt | rage $(echo $identities) -e -a | paper-age --force --no-footer --title=YubikeyIds --age-input; Decode: cat out.age | rage -d -i ~/git/secrets/identities
