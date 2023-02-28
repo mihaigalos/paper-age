@@ -117,11 +117,6 @@ impl Document {
                 Pt::from(self.page_size.dimensions().height
                 - self.page_size.dimensions().margin
                 - Mm::from(Pt(font_size)) * 2.0), 270.0));
-        // current_layer.set_text_cursor(
-        //     self.page_size.qrcode_left_edge() + self.page_size.qrcode_size() + Mm::from(Pt(font_size)),
-        //     self.page_size.dimensions().height
-        //         - self.page_size.dimensions().margin
-        //         - Mm::from(Pt(font_size)) * 2.0);
         current_layer.write_text(date, &self.title_font);
         current_layer.end_text_section();
     }
