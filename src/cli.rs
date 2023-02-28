@@ -46,6 +46,10 @@ pub struct Args {
     #[arg(short, long, default_value_t = false)]
     pub age_input: bool,
 
+    /// Identities to encrypt to. Use when encrypting to Yubikey identities.
+    #[arg(short, long, default_value = "")]
+    pub identities: String,
+
     /// The path to the file to read. Defaults to standard input. Max. ~1.9KB.
     pub input: Option<PathBuf>,
 }

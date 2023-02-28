@@ -16,7 +16,6 @@ use age::{
     secrecy::{Secret, SecretString},
 };
 use clap::Parser;
-use printpdf::LineDashPattern;
 use qrcode::types::QrError;
 
 pub mod builder;
@@ -118,19 +117,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    pdf.insert_passphrase();
-
-    pdf.draw_line(
-        vec![
-            pdf.page_size.dimensions().center_left(),
-            pdf.page_size.dimensions().center_right(),
-        ],
-        1.0,
-        LineDashPattern {
-            dash_1: Some(5),
-            ..LineDashPattern::default()
-        },
-    );
+    if args.identities != "" {
+        pdf.insert_identities(args.identities);
+    }
 
     pdf.insert_pem_text(encrypted);
 

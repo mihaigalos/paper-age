@@ -256,6 +256,36 @@ impl Document {
         )
     }
 
+    /// Insert the identities
+    pub fn insert_identities(&self, identities: String) {
+        debug!("Inserting identities");
+
+        let current_layer = self.get_current_layer();
+
+        let mut baseline =
+            self.page_size.dimensions().height / 2.0 + self.page_size.dimensions().margin;
+
+        current_layer.use_text(
+            "Identities:",
+            10.0,
+            self.page_size.qrcode_left_edge(),
+            baseline,
+            &self.title_font,
+        );
+
+        for identity in identities.split(",") {
+            baseline -= Mm(5.0);
+            current_layer.use_text(
+                identity,
+                9.0,
+                self.page_size.qrcode_left_edge(),
+                baseline,
+                &self.title_font,
+            );
+        }
+
+    }
+
     /// Add the footer at the bottom of the page
     pub fn insert_footer(&self) {
         debug!("Inserting footer");
