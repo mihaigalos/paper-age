@@ -97,6 +97,35 @@ impl Document {
         );
     }
 
+    pub fn insert_date(&self) {
+        use printpdf::TextMatrix;
+        debug!("Inserting date");
+
+        let date = "2023_01_23";
+
+        let current_layer = self.get_current_layer();
+
+        let font_size = 14.0;
+
+        current_layer.begin_text_section();
+        current_layer.set_font(&self.title_font, font_size);
+
+        current_layer.set_text_cursor(Mm(250.0), Mm(250.0));
+        current_layer.set_text_matrix(
+            TextMatrix::TranslateRotate(
+                Pt::from(self.page_size.qrcode_left_edge() + self.page_size.qrcode_size() + Mm::from(Pt(font_size))),
+                Pt::from(self.page_size.dimensions().height
+                - self.page_size.dimensions().margin
+                - Mm::from(Pt(font_size)) * 2.0), 270.0));
+        // current_layer.set_text_cursor(
+        //     self.page_size.qrcode_left_edge() + self.page_size.qrcode_size() + Mm::from(Pt(font_size)),
+        //     self.page_size.dimensions().height
+        //         - self.page_size.dimensions().margin
+        //         - Mm::from(Pt(font_size)) * 2.0);
+        current_layer.write_text(date, &self.title_font);
+        current_layer.end_text_section();
+    }
+
     /// Insert the given PEM ciphertext in the bottom half of the page
     pub fn insert_pem_text(&self, pem: String) {
         debug!("Inserting PEM encoded ciphertext");

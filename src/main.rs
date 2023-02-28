@@ -116,7 +116,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
     }
-
+    pdf.insert_date();
     if args.identities != "" {
         pdf.insert_identities(args.identities);
     }
