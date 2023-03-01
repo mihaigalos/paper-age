@@ -98,10 +98,14 @@ impl Document {
     }
 
     pub fn insert_date(&self) {
+        extern crate chrono;
+        use chrono::Local;
+
         use printpdf::TextMatrix;
         debug!("Inserting date");
 
-        let date = "2023_01_23";
+        let date = Local::now();
+        let date: String = format!("{}",date.format("%Y%m%d_%H%M%S"));
 
         let current_layer = self.get_current_layer();
 
