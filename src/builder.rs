@@ -291,17 +291,20 @@ impl Document {
 
         current_layer.use_text(
             "Identities:",
-            10.0,
+            9.0,
             self.page_size.qrcode_left_edge(),
             baseline,
             &self.title_font,
         );
 
-        for identity in identities.split(",") {
-            baseline -= Mm(5.0);
+        for identity in identities.split(" -r ") {
+            if identity.len() == 0 {
+                continue;
+            }
+            baseline -= Mm(4.0);
             current_layer.use_text(
                 identity,
-                9.0,
+                8.0,
                 self.page_size.qrcode_left_edge(),
                 baseline,
                 &self.title_font,
