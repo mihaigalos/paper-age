@@ -57,12 +57,6 @@ RUN git clone --depth 1 https://github.com/str4d/rage.git \
     && cd rage \
     && cargo build --release
 
-FROM alpine:3.14 as tool
-
-RUN apk update \
-    && apk add \
-        libgcc \
-        pcsc-lite-dev
 # ------------------------------------------------------------
 
 FROM alpine:3.17 as tool
