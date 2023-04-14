@@ -1,12 +1,13 @@
-/target
+*.profraw
+/*.dat
 /*.jpeg
 /*.jpg
 /*.pdf
 /*.png
 /*.svg
-/*.dat
+/target
 /test.*
-test-output.json
-*.profraw
 in.txt
 input_file
+out.pdf
+test-output.json
