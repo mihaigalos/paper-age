@@ -9,3 +9,4 @@
 test-output.json
 *.profraw
 in.txt
+input_file

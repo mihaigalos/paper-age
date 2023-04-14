@@ -11,8 +11,6 @@ RUN apk update \
 
 COPY . /src
 
-RUN rustup update
-
 RUN cd /src && cargo build --release
 
 # ------------------------------------------------------------
@@ -27,10 +25,7 @@ RUN apk update \
         openssl-dev \
         pkgconfig
 
-COPY . /src
-
 WORKDIR /src
-RUN RUSTFLAGS="-C target-feature=-crt-static" cargo build --release
 
 RUN git clone --depth 1 https://github.com/str4d/rage.git \
     && cd rage \
@@ -48,13 +43,10 @@ RUN apk update \
         openssl-dev \
         pkgconfig
 
-COPY . /src
-
 WORKDIR /src
-RUN RUSTFLAGS="-C target-feature=-crt-static" cargo build --release
 
-RUN git clone --depth 1 https://github.com/str4d/rage.git \
-    && cd rage \
+RUN git clone --depth 1 https://github.com/str4d/age-plugin-yubikey.git \
+    && cd age-plugin-yubikey \
     && cargo build --release
 
 # ------------------------------------------------------------
@@ -66,11 +58,13 @@ RUN apk update \
         libgcc \
         pcsc-lite-dev
 
+RUN mkdir /src-paperage
+COPY . /src-paperage
+
 COPY --from=base-paper-age /src/target/release/paper-age /usr/local/bin
-COPY --from=base-age-plugin-yubikey /src/target/release/age-plugin-yubikey /usr/local/bin/
 COPY --from=base-rage /src/rage/target/release/rage* /usr/local/bin/
+COPY --from=base-age-plugin-yubikey /src/age-plugin-yubikey/target/release/age-plugin-yubikey /usr/local/bin/
 
 RUN adduser -D user
 USER user
 WORKDIR /src
-ENTRYPOINT [ "paper-age" ]
