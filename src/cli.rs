@@ -50,7 +50,8 @@ pub struct Args {
     #[arg(short, long, default_value = "")]
     pub identities: String,
 
-    /// The path to the file to read. Defaults to standard input. Max. ~1.9KB.
+    /// The path to the file to read. Defaults to standard input. Max. ~1.9KB. Usage: cat input | paper-age --force --title=YubikeyIds --age-input --no-footer --identities=' -r age1yubikey1qf23uc3g4e9gv4fnn8zv80s3j6s0wghqgplhzz7lr9skhelfxxsy6lk3w9g -r age1yubikey1qgve538jrxtdv6al9aqr4f052f6mr9h24zu2l4440jk2e3kzrmywyj5cl39 -r age1yubikey1qf0ngpeua8h7pauzm68h5wa0x2q3vx59mgxl4cvlhkhj026fc8k358fjeuw'"
+    ///
     pub input: Option<PathBuf>,
 }
 
