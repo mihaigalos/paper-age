@@ -6,7 +6,7 @@ docker_user_repo := "mihaigalos"
 docker_image_dockerhub := docker_user_repo + "/" + tool + ":latest"
 
 build:
-    sudo docker build --network=host -t {{ docker_image_dockerhub }} .
+    docker build --network=host -t {{ docker_image_dockerhub }} .
 
 push:
     sudo docker push {{ docker_image_dockerhub }}
